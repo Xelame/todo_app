@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tp_fiverpod_freezed/models/todo_model.dart';
-
-import 'api_service.dart';
+import 'package:tp_fiverpod_freezed/pages/database.dart';
+import './models/todo_model.dart';
+import 'pages/addtask.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,38 +58,62 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final apiService = ApiService();
+  final DatabaseHelper _db = DatabaseHelper.instance;
+  Future<List<Todo>>? _data;
+
+  @override
+  void initState() {
+    super.initState();
+    _data = _db.getAllTodos();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder<TodoResponse>(
-            future: apiService.fetchTodos(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+      body: FutureBuilder<List<Todo>>(
+        future: _data,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-              if (snapshot.hasError) {
-                return Text('Erreur : ${snapshot.error}');
-              }
+          if (snapshot.hasError) {
+            return Text('Erreur : ${snapshot.error}');
+          }
 
-              final todos = snapshot.data!.todos;
-              return ListView.builder(
-                itemCount: todos.length,
-                itemBuilder: (context, index) {
-                  final todo = todos[index];
-                  return ListTile(
-                    title: Text(todo.todo),
-                    trailing: Icon(
-                      todo.completed
-                          ? Icons.check_box
-                          : Icons.check_box_outline_blank,
-                    ),
-                  );
-                },
-                scrollDirection: Axis.vertical,
+          final todos = snapshot.data!;
+          if (todos.isEmpty) {
+            return const Center(
+              child: Text("No Task"),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: todos.length,
+            itemBuilder: (context, index) {
+              final todo = todos[index];
+              return ListTile(
+                title: Text(todo.task),
+                trailing: Icon(
+                  todo.isCompleted == 1
+                      ? Icons.check_box
+                      : Icons.check_box_outline_blank,
+                ),
               );
-            }));
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddTaskScreen()),
+          );
+        },
+        label: const Text('Add Task'),
+        icon: const Icon(Icons.add),
+      ),
+    );
   }
 }
