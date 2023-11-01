@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tp_fiverpod_freezed/main.dart';
 import 'package:tp_fiverpod_freezed/models/todo_model.dart';
 import 'package:tp_fiverpod_freezed/pages/database.dart';
 
 class AddTaskScreen extends StatefulWidget {
-
   const AddTaskScreen({super.key});
 
   @override
@@ -12,7 +10,6 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  
   final TextEditingController _taskNameController = TextEditingController();
 
   void _addTaskToList() {
@@ -20,10 +17,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     if (taskTitle.isNotEmpty) {
       DatabaseHelper.instance.insert(Todo(task: taskTitle, isCompleted: 0));
       _taskNameController.clear();
-      Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MyHomePage(title: "De Retour")),
-          ); // Revenir à l'écran principal
+      Navigator.pop(context); // Revenir à l'écran principal
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
