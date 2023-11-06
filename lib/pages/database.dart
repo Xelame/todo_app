@@ -47,6 +47,13 @@ Future<List<Todo>> getAllTodos() async {
   return todos.map((e) => Todo.fromJson(e)).toList();
 }
 
+// Get specific task
+Future<Todo> getTodoById(int id) async {
+  Database db = await instance.database;
+  var todo = await db.query(_tableName, where: 'id = ?', whereArgs: [id]);
+  return Todo.fromJson(todo.first);
+}
+
 // Update a task
 Future<int> update(Todo todo) async {
   Database db = await instance.database;

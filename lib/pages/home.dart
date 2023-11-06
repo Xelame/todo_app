@@ -39,46 +39,55 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Todo App'),
       ),
-      body: FutureBuilder<List<Todo>>(
-        future: _data,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: SafeArea(
+        child: FutureBuilder<List<Todo>>(
+          future: _data,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (snapshot.hasError) {
-            return Text('Erreur : ${snapshot.error}');
-          }
+            if (snapshot.hasError) {
+              return Text('Erreur : ${snapshot.error}');
+            }
 
-          final todos = snapshot.data!;
-          if (todos.isEmpty) {
-            return const Center(
-              child: Text("No Task"),
-            );
-          }
-
-          return ListView.builder(
-            itemCount: todos.length,
-            itemBuilder: (context, index) {
-              final todo = todos[index];
-              return CheckboxListTile(
-                value: todo.isCompleted == 1,
-                onChanged: (bool? value) async {
-                  await _db.update(
-                    Todo(
-                        id: todo.id,
-                        task: todo.task,
-                        isCompleted: todo.isCompleted == 0 ? 1 : 0),
-                  );
-                  setState(() {
-                    _data = _db.getAllTodos();
-                  });
-                },
-                title: Text(todo.task),
+            final todos = snapshot.data!;
+            if (todos.isEmpty) {
+              return const Center(
+                child: Text("No Task"),
               );
-            },
-          );
-        },
+            }
+
+            return ListView.builder(
+              itemCount: todos.length,
+              itemBuilder: (context, index) {
+                final todo = todos[index];
+                return CheckboxListTile(
+                  value: todo.isCompleted == 1,
+                  onChanged: (bool? value) async {
+                    // back-end
+                    await _db.update(
+                      Todo(
+                          id: todo.id,
+                          task: todo.task,
+                          isCompleted: todo.isCompleted == 0 ? 1 : 0),
+                    );
+                    // front-end
+                    setState(
+                      () {
+                        todos[index] = Todo(
+                            id: todo.id,
+                            task: todo.task,
+                            isCompleted: todo.isCompleted == 0 ? 1 : 0);
+                      },
+                    );
+                  },
+                  title: Text(todo.task),
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {

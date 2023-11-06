@@ -34,7 +34,31 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Add Task'),
       ),
-      body: Center(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _taskNameController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Task Name',
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _addTaskToList();
+                },
+                child: const Text('Add Task'),
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      /*Center(
         child: Column(
           children: [
             TextFormField(
@@ -53,7 +77,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ),
           ],
         ),
-      ),
+      ),*/
     );
   }
 }
