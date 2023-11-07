@@ -62,27 +62,52 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: todos.length,
               itemBuilder: (context, index) {
                 final todo = todos[index];
-                return CheckboxListTile(
-                  value: todo.isCompleted == 1,
-                  onChanged: (bool? value) async {
-                    // back-end
-                    await _db.update(
-                      Todo(
-                          id: todo.id,
-                          task: todo.task,
-                          isCompleted: todo.isCompleted == 0 ? 1 : 0),
-                    );
-                    // front-end
-                    setState(
-                      () {
-                        todos[index] = Todo(
-                            id: todo.id,
-                            task: todo.task,
-                            isCompleted: todo.isCompleted == 0 ? 1 : 0);
-                      },
-                    );
-                  },
-                  title: Text(todo.task),
+                return Column(
+                  children: [
+                    ListTile(
+                      title: Text(todo.taskTitle),
+                      subtitle: Text(todo.taskDescription,
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          )),
+                      leading: Checkbox(
+                        value: todo.isCompleted == 1,
+                        onChanged: (bool? value) async {
+                          // back-end
+                          await _db.update(
+                            Todo(
+                                id: todo.id,
+                                taskTitle: todo.taskTitle,
+                                taskDescription: todo.taskDescription,
+                                isCompleted: todo.isCompleted == 0 ? 1 : 0),
+                          );
+                          // front-end
+                          setState(
+                            () {
+                              todos[index] = Todo(
+                                  id: todo.id,
+                                  taskTitle: todo.taskTitle,
+                                  taskDescription: todo.taskDescription,
+                                  isCompleted: todo.isCompleted == 0 ? 1 : 0);
+                            },
+                          );
+                        },
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () async {
+                          // back-end
+                          await _db.delete(todo.id!);
+                          // front-end
+                          setState(() {
+                            todos.removeAt(index);
+                          });
+                        },
+                      )
+                    ),
+                    const Divider(),
+                  ],
                 );
               },
             );

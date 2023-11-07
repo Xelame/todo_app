@@ -10,18 +10,25 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  final TextEditingController _taskNameController = TextEditingController();
+  final TextEditingController _taskTitleController = TextEditingController();
+  final TextEditingController _taskDescriptionController =
+      TextEditingController();
 
   void _addTaskToList() {
-    String taskTitle = _taskNameController.text;
+    String taskTitle = _taskTitleController.text;
+    String taskDescription = _taskDescriptionController.text;
     if (taskTitle.isNotEmpty) {
-      DatabaseHelper.instance.insert(Todo(task: taskTitle, isCompleted: 0));
-      _taskNameController.clear();
+      if (taskDescription.isEmpty) {
+        taskDescription = 'No description';
+      } 
+
+      DatabaseHelper.instance.insert(Todo(taskTitle: taskTitle,taskDescription: taskDescription,isCompleted: 0));
+      _taskTitleController.clear();
       Navigator.pop(context); // Revenir à l'écran principal
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Task name cannot be empty'),
+          content: Text('Task title cannot be empty'),
         ),
       );
     }
@@ -29,6 +36,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const spacer = SizedBox(height: 20);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -40,13 +48,26 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           child: Column(
             children: [
               TextFormField(
-                controller: _taskNameController,
+                controller: _taskTitleController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Task Name',
+                  labelText: 'Title',
                 ),
               ),
-              const SizedBox(height: 20),
+              spacer,
+
+              SizedBox(
+                child : TextFormField(
+                  controller: _taskDescriptionController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Description',
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                  ),
+                  maxLines: 2,
+                ),
+              ),
+              spacer,
               ElevatedButton(
                 onPressed: () {
                   _addTaskToList();
@@ -57,27 +78,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ),
         ),
       ),
-
-      /*Center(
-        child: Column(
-          children: [
-            TextFormField(
-              controller: _taskNameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Task Name',
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _addTaskToList();
-              },
-              child: const Text('Add Task'),
-            ),
-          ],
-        ),
-      ),*/
     );
   }
 }

@@ -28,7 +28,8 @@ Future _onCreate(Database db, int version) async {
   await db.execute('''
     CREATE TABLE $_tableName (
       id INTEGER PRIMARY KEY,
-      task TEXT NOT NULL,
+      taskTitle TEXT NOT NULL,
+      taskDescription TEXT NOT NULL,
       isCompleted INTEGER NOT NULL
     )
   ''');

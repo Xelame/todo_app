@@ -7,7 +7,8 @@ part 'todo_model.g.dart';
 class Todo with _$Todo {
   factory Todo({
     int? id,
-    required String task,
+    required String taskTitle,
+    required String taskDescription,
     required int isCompleted, // 0 or 1
   }) = _Todo;
 

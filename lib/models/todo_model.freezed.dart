@@ -21,7 +21,8 @@ Todo _$TodoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Todo {
   int? get id => throw _privateConstructorUsedError;
-  String get task => throw _privateConstructorUsedError;
+  String get taskTitle => throw _privateConstructorUsedError;
+  String get taskDescription => throw _privateConstructorUsedError;
   int get isCompleted => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +35,8 @@ abstract class $TodoCopyWith<$Res> {
   factory $TodoCopyWith(Todo value, $Res Function(Todo) then) =
       _$TodoCopyWithImpl<$Res, Todo>;
   @useResult
-  $Res call({int? id, String task, int isCompleted});
+  $Res call(
+      {int? id, String taskTitle, String taskDescription, int isCompleted});
 }
 
 /// @nodoc
@@ -51,7 +53,8 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
   @override
   $Res call({
     Object? id = freezed,
-    Object? task = null,
+    Object? taskTitle = null,
+    Object? taskDescription = null,
     Object? isCompleted = null,
   }) {
     return _then(_value.copyWith(
@@ -59,9 +62,13 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      task: null == task
-          ? _value.task
-          : task // ignore: cast_nullable_to_non_nullable
+      taskTitle: null == taskTitle
+          ? _value.taskTitle
+          : taskTitle // ignore: cast_nullable_to_non_nullable
+              as String,
+      taskDescription: null == taskDescription
+          ? _value.taskDescription
+          : taskDescription // ignore: cast_nullable_to_non_nullable
               as String,
       isCompleted: null == isCompleted
           ? _value.isCompleted
@@ -78,7 +85,8 @@ abstract class _$$TodoImplCopyWith<$Res> implements $TodoCopyWith<$Res> {
       __$$TodoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String task, int isCompleted});
+  $Res call(
+      {int? id, String taskTitle, String taskDescription, int isCompleted});
 }
 
 /// @nodoc
@@ -92,7 +100,8 @@ class __$$TodoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? task = null,
+    Object? taskTitle = null,
+    Object? taskDescription = null,
     Object? isCompleted = null,
   }) {
     return _then(_$TodoImpl(
@@ -100,9 +109,13 @@ class __$$TodoImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      task: null == task
-          ? _value.task
-          : task // ignore: cast_nullable_to_non_nullable
+      taskTitle: null == taskTitle
+          ? _value.taskTitle
+          : taskTitle // ignore: cast_nullable_to_non_nullable
+              as String,
+      taskDescription: null == taskDescription
+          ? _value.taskDescription
+          : taskDescription // ignore: cast_nullable_to_non_nullable
               as String,
       isCompleted: null == isCompleted
           ? _value.isCompleted
@@ -115,7 +128,11 @@ class __$$TodoImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$TodoImpl implements _Todo {
-  _$TodoImpl({this.id, required this.task, required this.isCompleted});
+  _$TodoImpl(
+      {this.id,
+      required this.taskTitle,
+      required this.taskDescription,
+      required this.isCompleted});
 
   factory _$TodoImpl.fromJson(Map<String, dynamic> json) =>
       _$$TodoImplFromJson(json);
@@ -123,13 +140,15 @@ class _$TodoImpl implements _Todo {
   @override
   final int? id;
   @override
-  final String task;
+  final String taskTitle;
+  @override
+  final String taskDescription;
   @override
   final int isCompleted;
 
   @override
   String toString() {
-    return 'Todo(id: $id, task: $task, isCompleted: $isCompleted)';
+    return 'Todo(id: $id, taskTitle: $taskTitle, taskDescription: $taskDescription, isCompleted: $isCompleted)';
   }
 
   @override
@@ -138,14 +157,18 @@ class _$TodoImpl implements _Todo {
         (other.runtimeType == runtimeType &&
             other is _$TodoImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.task, task) || other.task == task) &&
+            (identical(other.taskTitle, taskTitle) ||
+                other.taskTitle == taskTitle) &&
+            (identical(other.taskDescription, taskDescription) ||
+                other.taskDescription == taskDescription) &&
             (identical(other.isCompleted, isCompleted) ||
                 other.isCompleted == isCompleted));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, task, isCompleted);
+  int get hashCode =>
+      Object.hash(runtimeType, id, taskTitle, taskDescription, isCompleted);
 
   @JsonKey(ignore: true)
   @override
@@ -164,7 +187,8 @@ class _$TodoImpl implements _Todo {
 abstract class _Todo implements Todo {
   factory _Todo(
       {final int? id,
-      required final String task,
+      required final String taskTitle,
+      required final String taskDescription,
       required final int isCompleted}) = _$TodoImpl;
 
   factory _Todo.fromJson(Map<String, dynamic> json) = _$TodoImpl.fromJson;
@@ -172,7 +196,9 @@ abstract class _Todo implements Todo {
   @override
   int? get id;
   @override
-  String get task;
+  String get taskTitle;
+  @override
+  String get taskDescription;
   @override
   int get isCompleted;
   @override
